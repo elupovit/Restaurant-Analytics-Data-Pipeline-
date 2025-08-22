@@ -1,0 +1,56 @@
+-- Create the database
+CREATE DATABASE restaurant_analytics;
+GO
+
+-- Switch to the database
+USE restaurant_analytics;
+GO
+
+-- Create a schema
+CREATE SCHEMA restaurant AUTHORIZATION dbo;
+GO
+
+-- Create date_dim table
+CREATE TABLE restaurant.date_dim (
+    date_id INT PRIMARY KEY,
+    full_date DATE,
+    day_of_week VARCHAR(20),
+    is_weekend BIT
+);
+GO
+
+-- Create order_item_options table
+CREATE TABLE restaurant.order_item_options (
+    order_id VARCHAR(50),
+    lineitem_id VARCHAR(50),
+    option_group_name VARCHAR(100),
+    option_name VARCHAR(100),
+    option_price DECIMAL(10,2),
+    option_quantity INT,
+    PRIMARY KEY (order_id, lineitem_id, option_name)
+);
+GO
+
+-- Create order_items table
+CREATE TABLE restaurant.order_items (
+    app_name VARCHAR(50),
+    restaurant_id VARCHAR(50),
+    creation_time_utc DATETIME,
+    order_id VARCHAR(50),
+    user_id VARCHAR(50),
+    printed_card_number VARCHAR(50),
+    is_loyalty BIT,
+    currency VARCHAR(10), 
+    lineitem_id VARCHAR(50),
+    item_category VARCHAR(50),
+    item_name VARCHAR(100),
+    item_price DECIMAL(10,2),
+    item_quantity INT,
+    PRIMARY KEY (order_id, lineitem_id)
+);
+GO
+
+-- Check where the data exists
+select count(*) from raw_order_items;
+select count(*) from raw_order_item_options;
+select count(*) from raw_date_dim;
